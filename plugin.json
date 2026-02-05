@@ -1,0 +1,26 @@
+{
+    "name": "siyuan-timetrail",
+    "author": "LunaNorth",
+    "url": "https://github.com/LunaNorth/siyuan-timetrail",
+    "version": "1.0.0",
+    "minAppVersion": "3.0.0",
+    "disabledInPublish": true,
+    "backends": ["all"],
+    "frontends": ["desktop"],
+    "displayName": {
+        "default": "TimeTrail",
+        "zh_CN": "时迹"
+    },
+    "description": {
+        "default": "A SiYuan Note plugin for visualizing and managing LifeLog data",
+        "zh_CN": "可视化时间记录的思原笔记插件"
+    },
+    "readme": {
+        "default": "README_zh_CN.md",
+        "zh_CN": "README_zh_CN.md"
+    },
+    "keywords": ["时间记录", "可视化"],
+    "funding": {
+        "custom": []
+    }
+}
