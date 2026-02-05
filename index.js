@@ -71,14 +71,6 @@ module.exports = class TimeRecordPlugin extends Plugin {
             show: () => {
                 // 当停靠栏被点击显示时，立即刷新数据
                 this.loadTimeRecords();
-                
-                // 设置按钮的 onclick 属性（会覆盖之前的）
-                const refreshBtn = this.sidebarContainer?.querySelector('.time-record-refresh');
-                if (refreshBtn) {
-                    refreshBtn.onclick = () => {
-                        this.loadTimeRecords();
-                    };
-                }
             },
             destroy: () => {}
         });
@@ -110,7 +102,6 @@ module.exports = class TimeRecordPlugin extends Plugin {
                     <h3>⏰ 时间记录</h3>
                     <div class="header-actions">
                         <button class="time-record-refresh" title="刷新数据">🔄</button>
-                        <button class="time-record-close">×</button>
                     </div>
                 </div>
                 <div class="time-record-controls">
@@ -163,14 +154,6 @@ module.exports = class TimeRecordPlugin extends Plugin {
         if (refreshBtn) {
             refreshBtn.addEventListener('click', () => {
                 this.loadTimeRecords();
-            });
-        }
-        
-        // 关闭按钮
-        const closeBtn = this.sidebarContainer.querySelector('.time-record-close');
-        if (closeBtn) {
-            closeBtn.addEventListener('click', () => {
-                this.toggleSidebar();
             });
         }
         
@@ -950,9 +933,11 @@ module.exports = class TimeRecordPlugin extends Plugin {
     }
     
     toggleSidebar() {
-        const dock = this.getDock('time_record_dock');
-        if (dock) {
-            dock.show();
+        // 简化：只显示停靠栏
+        // 用户可以通过思源自带的关闭按钮来关闭停靠栏
+        if (this.dockInstance) {
+            // 确保停靠栏显示
+            this.dockInstance.element.style.display = 'flex';
         }
     }
     
@@ -966,12 +951,9 @@ module.exports = class TimeRecordPlugin extends Plugin {
     async onLayoutReady() {}
     
     onunload() {
-        // 修改点2：在插件卸载时清理所有组件
-        console.log("时迹插件 正在卸载...");
         
         // 1. 清理设置面板
         if (this.setting) {
-            this.setting.destroy();
             this.setting = null;
         }
         
@@ -990,7 +972,7 @@ module.exports = class TimeRecordPlugin extends Plugin {
         this.currentData = [];
         this.discoveredTypes.clear();
         
-        console.log("时迹插件 已卸载");
+        console.log("时迹插件 已关闭");
     }
     
     // 测试
@@ -998,7 +980,7 @@ module.exports = class TimeRecordPlugin extends Plugin {
         // 卸载插件时删除插件数据
         // Delete plugin data when uninstalling the plugin
         this.removeData(STORAGE_NAME).catch(e => {
-            showMessage(`uninstall [${this.name}] remove data [${STORAGE_NAME}] fail: ${e.msg}`);
+            this.showMessage(`uninstall [${this.name}] remove data [${STORAGE_NAME}] fail: ${e.msg}`);
         });
     }
 };

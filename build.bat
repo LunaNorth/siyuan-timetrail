@@ -34,6 +34,13 @@ if exist "%TEMP_DIR%\build.sh" del /q "%TEMP_DIR%\build.sh"
 if exist "%TEMP_DIR%\build.bat" del /q "%TEMP_DIR%\build.bat"
 if exist "%TEMP_DIR%\.hotreload" del /q "%TEMP_DIR%\.hotreload"
 
+REM 排除文档与构建相关文件（含常见大小写变体）
+del /q "%TEMP_DIR%\LICENSE" 2>nul
+del /q "%TEMP_DIR%\license" 2>nul
+del /q "%TEMP_DIR%\package-lock.json" 2>nul
+del /q "%TEMP_DIR%\README.md" 2>nul
+del /q "%TEMP_DIR%\readme.md" 2>nul
+
 REM 删除旧的输出文件
 if exist "%ORIGINAL_DIR%\%OUTPUT%" del /q "%ORIGINAL_DIR%\%OUTPUT%"
 
