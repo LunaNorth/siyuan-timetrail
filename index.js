@@ -1,4 +1,4 @@
-const { Plugin, Setting } = require("siyuan");
+const { Plugin, Setting, showMessage } = require("siyuan");
 
 const STORAGE_NAME = "time-record-config.json";
 
@@ -237,7 +237,7 @@ module.exports = class TimeRecordPlugin extends Plugin {
                 this.config.typeIcon = typeIconInput.value;      // 新增
                 
                 await this.saveData(STORAGE_NAME, this.config);
-                this.showMessage('配置已保存');
+                showMessage('配置已保存');
                 
                 // 重新渲染侧边栏以应用新配置
                 if (this.sidebarContainer) {
@@ -933,18 +933,9 @@ module.exports = class TimeRecordPlugin extends Plugin {
     }
     
     toggleSidebar() {
-        // 简化：只显示停靠栏
-        // 用户可以通过思源自带的关闭按钮来关闭停靠栏
         if (this.dockInstance) {
             // 确保停靠栏显示
             this.dockInstance.element.style.display = 'flex';
-        }
-    }
-    
-    showMessage(text) {
-        // 使用思源的通知系统
-        if (window.siyuan && window.siyuan.notice) {
-            window.siyuan.notice(text, 3000);
         }
     }
     
@@ -977,10 +968,8 @@ module.exports = class TimeRecordPlugin extends Plugin {
     
     // 测试
     uninstall() {
-        // 卸载插件时删除插件数据
-        // Delete plugin data when uninstalling the plugin
         this.removeData(STORAGE_NAME).catch(e => {
-            this.showMessage(`uninstall [${this.name}] remove data [${STORAGE_NAME}] fail: ${e.msg}`);
+            showMessage(`uninstall [${this.name}] remove data [${STORAGE_NAME}] fail: ${e.msg}`);
         });
     }
 };

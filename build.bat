@@ -16,33 +16,30 @@ set ORIGINAL_DIR=%cd%
 
 REM 创建临时目录
 set TEMP_DIR=%TEMP%\plugin_build_%RANDOM%
-mkdir "%TEMP_DIR%"
+mkdir "%TEMP_DIR%" 2>nul
 
 echo 📁 复制插件文件到临时目录...
 
 REM 复制全部内容 (排除临时目录本身)
-xcopy "%PLUGIN_DIR%\*" "%TEMP_DIR%\" /E /I /Q /H /Y
+xcopy "%PLUGIN_DIR%\*" "%TEMP_DIR%\" /E /I /Q /H /Y >nul 2>&1
 
 REM 删除不需要的文件和目录
-if exist "%TEMP_DIR%\.git" rd /s /q "%TEMP_DIR%\.git"
-if exist "%TEMP_DIR%\.gitignore" del /q "%TEMP_DIR%\.gitignore"
-if exist "%TEMP_DIR%\.history" rd /s /q "%TEMP_DIR%\.history"
-if exist "%TEMP_DIR%\.idea" rd /s /q "%TEMP_DIR%\.idea"
-if exist "%TEMP_DIR%\.DS_Store" del /q "%TEMP_DIR%\.DS_Store"
-if exist "%TEMP_DIR%\node_modules" rd /s /q "%TEMP_DIR%\node_modules"
-if exist "%TEMP_DIR%\build.sh" del /q "%TEMP_DIR%\build.sh"
-if exist "%TEMP_DIR%\build.bat" del /q "%TEMP_DIR%\build.bat"
-if exist "%TEMP_DIR%\.hotreload" del /q "%TEMP_DIR%\.hotreload"
-
-REM 排除文档与构建相关文件（含常见大小写变体）
-del /q "%TEMP_DIR%\LICENSE" 2>nul
-del /q "%TEMP_DIR%\license" 2>nul
-del /q "%TEMP_DIR%\package-lock.json" 2>nul
-del /q "%TEMP_DIR%\README.md" 2>nul
-del /q "%TEMP_DIR%\readme.md" 2>nul
+if exist "%TEMP_DIR%\.git" rd /s /q "%TEMP_DIR%\.git" >nul 2>&1
+if exist "%TEMP_DIR%\.gitignore" del /q "%TEMP_DIR%\.gitignore" >nul 2>&1
+if exist "%TEMP_DIR%\.history" rd /s /q "%TEMP_DIR%\.history" >nul 2>&1
+if exist "%TEMP_DIR%\.idea" rd /s /q "%TEMP_DIR%\.idea" >nul 2>&1
+if exist "%TEMP_DIR%\.DS_Store" del /q "%TEMP_DIR%\.DS_Store" >nul 2>&1
+if exist "%TEMP_DIR%\node_modules" rd /s /q "%TEMP_DIR%\node_modules" >nul 2>&1
+if exist "%TEMP_DIR%\LICENSE" del /q "%TEMP_DIR%\LICENSE" >nul 2>&1
+if exist "%TEMP_DIR%\package-lock.json" del /q "%TEMP_DIR%\package-lock.json" >nul 2>&1
+if exist "%TEMP_DIR%\README.md" del /q "%TEMP_DIR%\README.md" >nul 2>&1
+if exist "%TEMP_DIR%\i18n" rd /s /q "%TEMP_DIR%\i18n" >nul 2>&1
+if exist "%TEMP_DIR%\build.sh" del /q "%TEMP_DIR%\build.sh" >nul 2>&1
+if exist "%TEMP_DIR%\build.bat" del /q "%TEMP_DIR%\build.bat" >nul 2>&1
+if exist "%TEMP_DIR%\.hotreload" del /q "%TEMP_DIR%\.hotreload" >nul 2>&1
 
 REM 删除旧的输出文件
-if exist "%ORIGINAL_DIR%\%OUTPUT%" del /q "%ORIGINAL_DIR%\%OUTPUT%"
+if exist "%ORIGINAL_DIR%\%OUTPUT%" del /q "%ORIGINAL_DIR%\%OUTPUT%" >nul 2>&1
 
 REM 使用 PowerShell 打包 (Windows 内置)
 echo 📦 正在打包...
@@ -50,12 +47,12 @@ powershell -nologo -noprofile -command "Compress-Archive -Path '%TEMP_DIR%\*' -D
 
 if %errorlevel% neq 0 (
     echo ❌ 打包失败
-    rd /s /q "%TEMP_DIR%"
+    rd /s /q "%TEMP_DIR%" >nul 2>&1
     exit /b 1
 )
 
 REM 清理临时目录
-rd /s /q "%TEMP_DIR%"
+rd /s /q "%TEMP_DIR%" >nul 2>&1
 
 echo ✅ 打包成功: %OUTPUT%
 
