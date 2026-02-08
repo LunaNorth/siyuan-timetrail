@@ -1,27 +1,32 @@
-# TimeTrail
+# 时迹
 
-LifeLog data visualization plugin for SiYuan Note.
+思源笔记LifeLog数据可视化插件。
 
-## Prerequisites
+## 使用前提
 
-This plugin requires the **LifeLog feature** from the YeGui plugin. Please ensure:
+本插件需要配合叶归插件的**LifeLog功能**使用。请确保：
 
-1. YeGui plugin is installed and enabled
-2. LifeLog feature is enabled in YeGui plugin settings
+1. 已安装并启用叶归插件
+2. 在叶归插件设置中开启LifeLog功能
 
-## Usage
 
-1. **Enable LifeLog**: Enable LifeLog feature in YeGui plugin settings
-2. **Record Time**: Use YeGui plugin's shortcuts or menu to record current time
-3. **View Records**: Open TimeTrail plugin to view corresponding LifeLog records
-4. **Filter & Statistics**: Filter by time range or type, view statistical information
+## 使用方法
 
-## Features
+1. **启用LifeLog**：在叶归插件设置中启用LifeLog功能
+2. **记录时间**：使用叶归插件的快捷键或菜单记录当前时间
+3. **查看记录**：打开时迹插件，即可查看相应的LifeLog记录
+4. **筛选统计**：按时间范围或类型筛选，查看统计信息
 
-- Timeline display of LifeLog records
-- Filter by time and type
-- Data visualization statistics
+## 功能特性
 
-## Links
+- 时间轴展示LifeLog记录
+- 按时间和类型筛选
+- 统计数据可视化
+
+## v1.0.1
+- 统计图表外观优化，采用更紧凑的表格样式
+- 调整进度条位置，使其更靠近类型文字
+
+## 链接
 
 - GitHub: https://github.com/LunaNorth/siyuan-timetrail
