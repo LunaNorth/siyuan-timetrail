@@ -367,8 +367,8 @@
 }
 
 .stats-panel h4 {
-    margin: 0 0 12px 0;
-    font-size: 14px;
+    margin: 0 0 16px 0;
+    font-size: 16px;
     font-weight: 600;
     color: var(--b3-theme-on-background);
     display: flex;
@@ -380,7 +380,7 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 8px;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 
 .stat-item {
@@ -445,14 +445,14 @@
     letter-spacing: 0.5px;
 }
 
-/* 饼图容器 */
+/* 图表容器 */
 .chart-container {
     width: 100%;
     position: relative;
-    margin-top: 12px;
-    padding-top: 12px;
+    margin-top: 16px;
+    padding-top: 16px;
     border-top: 1px solid var(--b3-border-color);
-    /* 饼图动画 */
+    /* 图表动画 */
     animation: chartFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.5s forwards;
     opacity: 0;
 }
@@ -467,46 +467,129 @@
 }
 
 .chart-title {
-    font-size: 12px;
-    color: var(--b3-theme-on-surface);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--b3-theme-on-background);
     margin-bottom: 12px;
-    text-align: center;
-    font-weight: 500;
+    text-align: left;
 }
 
-.pie-chart-container {
-    position: relative;
-    height: 160px;
+/* 统计图表样式 - 紧凑表格样式 */
+.stats-chart-container {
+    width: 100%;
     display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.pie-chart-legend {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 12px;
-    padding: 10px;
+    flex-direction: column;
+    gap: 2px; /* 非常小的间距 */
     background: var(--b3-theme-surface-light);
-    border-radius: 6px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--b3-border-color);
 }
 
-.legend-item {
+.chart-item {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
+    padding: 4px 8px; /* 非常紧凑的内边距 */
+    border-bottom: 1px solid var(--b3-border-color-light);
+    background: var(--b3-theme-surface);
+    min-height: 28px; /* 稍微增加高度以便显示文字 */
+}
+
+.chart-item:last-child {
+    border-bottom: none;
+}
+
+.chart-label {
+    width: 90px; /* 固定宽度，让进度条更靠近 */
+    font-size: 12px;
+    color: var(--b3-theme-on-background);
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.chart-bar-container {
+    flex: 1;
+    height: 18px; /* 增加高度以便显示文字 */
+    background-color: var(--b3-theme-surface-light);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.chart-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--chart-color), var(--chart-color-light));
+    border-radius: 3px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 35px; /* 确保有足够空间显示百分比文字 */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 6px; /* 添加内边距，让文字不贴边 */
+}
+
+.chart-bar-value {
     font-size: 11px;
-    color: var(--b3-theme-on-surface);
+    font-weight: 600;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     white-space: nowrap;
 }
 
-.legend-color {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
+.chart-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1px;
+    font-size: 11px;
+    min-width: 70px;
     flex-shrink: 0;
+    padding-left: 8px; /* 增加左边距，避免与进度条太近 */
+}
+
+.chart-count {
+    font-weight: 600;
+    color: var(--b3-theme-primary);
+    white-space: nowrap;
+}
+
+.chart-percentage {
+    color: var(--b3-theme-on-surface);
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+/* 颜色定义 - 保持原有颜色 */
+.chart-item:nth-child(1) .chart-bar {
+    --chart-color: #4c6ef5;
+    --chart-color-light: #6c8eff;
+}
+
+.chart-item:nth-child(2) .chart-bar {
+    --chart-color: #40c057;
+    --chart-color-light: #69db7c;
+}
+
+.chart-item:nth-child(3) .chart-bar {
+    --chart-color: #fab005;
+    --chart-color-light: #ffd43b;
+}
+
+.chart-item:nth-child(4) .chart-bar {
+    --chart-color: #ae3ec9;
+    --chart-color-light: #cc5de8;
+}
+
+.chart-item:nth-child(5) .chart-bar {
+    --chart-color: #fa5252;
+    --chart-color-light: #ff6b6b;
 }
 
 /* 加载状态 */
@@ -646,15 +729,33 @@
         gap: 8px;
     }
     
-    .pie-chart-container {
-        height: 140px;
-    }
-    
     .time-record-footer {
         flex-direction: column;
         gap: 6px;
         align-items: flex-start;
         font-size: 10px;
+    }
+    
+    .chart-item {
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 6px 8px;
+    }
+    
+    .chart-label {
+        width: 100%;
+    }
+    
+    .chart-bar-container {
+        width: calc(100% - 80px);
+        margin-left: 0;
+    }
+    
+    .chart-info {
+        min-width: 70px;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
     }
 }
 

@@ -667,71 +667,93 @@ module.exports = class TimeRecordPlugin extends Plugin {
         
         return legendContainer;
     }
+createStatsPanel(records) {
+    const stats = this.calculateStats(records);
+    const typeDistribution = this.calculateTypeDistribution(records);
     
-    createStatsPanel(records) {
-        const stats = this.calculateStats(records);
-        const typeDistribution = this.calculateTypeDistribution(records);
-        
-        const typeNames = Object.keys(typeDistribution);
-        const typeCounts = Object.values(typeDistribution);
-        
-        const colors = [
-            '#667eea', '#48bb78', '#ed8936', '#9f7aea', 
-            '#f56565', '#4299e1', '#38b2ac', '#ecc94b'
-        ];
-        
-        const panel = document.createElement('div');
-        panel.className = 'stats-panel';
-        
-        panel.innerHTML = `
-            <h4>信息统计</h4>
-            <div class="stats-grid">
-                <div class="stat-item ${this.currentTimeFilter === 'today' ? 'active' : ''}" data-time-filter="today">
-                    <div class="stat-value">${stats.day}</div>
-                    <div class="stat-label">今日</div>
-                </div>
-                <div class="stat-item ${this.currentTimeFilter === 'week' ? 'active' : ''}" data-time-filter="week">
-                    <div class="stat-value">${stats.week}</div>
-                    <div class="stat-label">本周</div>
-                </div>
-                <div class="stat-item ${this.currentTimeFilter === 'month' ? 'active' : ''}" data-time-filter="month">
-                    <div class="stat-value">${stats.month}</div>
-                    <div class="stat-label">本月</div>
-                </div>
-                <div class="stat-item ${this.currentTimeFilter === 'year' ? 'active' : ''}" data-time-filter="year">
-                    <div class="stat-value">${stats.year}</div>
-                    <div class="stat-label">今年</div>
-                </div>
+    // 获取类型名称和数量，并排序（从高到低）
+    const typeNames = Object.keys(typeDistribution);
+    const typeCounts = Object.values(typeDistribution);
+    
+    // 创建排序后的数据
+    const sortedData = typeNames.map((name, index) => ({
+        name,
+        count: typeCounts[index]
+    })).sort((a, b) => b.count - a.count);
+    
+    // 计算总数和百分比
+    const total = sortedData.reduce((sum, item) => sum + item.count, 0);
+    sortedData.forEach(item => {
+        item.percentage = total > 0 ? ((item.count / total) * 100).toFixed(1) : "0.0";
+    });
+    
+    const panel = document.createElement('div');
+    panel.className = 'stats-panel';
+    
+    panel.innerHTML = `
+        <h4>信息统计</h4>
+        <div class="stats-grid">
+            <div class="stat-item ${this.currentTimeFilter === 'today' ? 'active' : ''}" data-time-filter="today">
+                <div class="stat-value">${stats.day}</div>
+                <div class="stat-label">今日</div>
             </div>
-            
-            <div class="chart-container">
-                <div class="chart-title">类型分布统计</div>
-                <div class="pie-chart-container">
-                    <canvas id="pie-chart" width="300" height="200"></canvas>
-                </div>
+            <div class="stat-item ${this.currentTimeFilter === 'week' ? 'active' : ''}" data-time-filter="week">
+                <div class="stat-value">${stats.week}</div>
+                <div class="stat-label">本周</div>
             </div>
-        `;
+            <div class="stat-item ${this.currentTimeFilter === 'month' ? 'active' : ''}" data-time-filter="month">
+                <div class="stat-value">${stats.month}</div>
+                <div class="stat-label">本月</div>
+            </div>
+            <div class="stat-item ${this.currentTimeFilter === 'year' ? 'active' : ''}" data-time-filter="year">
+                <div class="stat-value">${stats.year}</div>
+                <div class="stat-label">今年</div>
+            </div>
+        </div>
         
-        panel.querySelectorAll('.stat-item').forEach(item => {
-            item.addEventListener('click', () => {
-                this.currentTimeFilter = item.dataset.timeFilter;
-                this.updateTimeFilterButtons();
-                this.renderTimeline();
-            });
+        <div class="chart-container">
+            <div class="chart-title">类型分布统计</div>
+            <div class="stats-chart-container" id="stats-chart">
+                <!-- 图表项将通过JavaScript动态添加 -->
+            </div>
+        </div>
+    `;
+    
+    // 绑定统计项点击事件
+    panel.querySelectorAll('.stat-item').forEach(item => {
+        item.addEventListener('click', () => {
+            this.currentTimeFilter = item.dataset.timeFilter;
+            this.updateTimeFilterButtons();
+            this.renderTimeline();
         });
-        
-        // 延迟绘制饼图，确保DOM已渲染
-        setTimeout(() => {
-            this.drawPieChart('pie-chart', typeCounts, typeNames, colors);
+    });
+    
+    // 添加图表项
+    const chartContainer = panel.querySelector('#stats-chart');
+    if (chartContainer) {
+        sortedData.forEach((item, index) => {
+            const chartItem = document.createElement('div');
+            chartItem.className = 'chart-item';
             
-            const chartContainer = panel.querySelector('.chart-container');
-            const legend = this.createPieChartLegend(typeCounts, typeNames, colors);
-            chartContainer.appendChild(legend);
-        }, 50);
-        
-        return panel;
+            chartItem.innerHTML = `
+                <div class="chart-label">${item.name}</div>
+                <div class="chart-bar-container">
+                    <div class="chart-bar" style="width: ${item.percentage}%">
+                        <span class="chart-bar-value">${item.percentage}%</span>
+                    </div>
+                </div>
+                <div class="chart-info">
+                    <span class="chart-count">${item.count}笔</span>
+                    <span class="chart-percentage">${item.percentage}%</span>
+                </div>
+            `;
+            
+            chartContainer.appendChild(chartItem);
+        });
     }
     
+    return panel;
+}
     updateTimeFilterButtons() {
         if (!this.sidebarContainer) return;
         
