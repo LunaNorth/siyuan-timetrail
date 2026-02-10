@@ -36,6 +36,7 @@ if exist "%TEMP_DIR%\README.md" del /q "%TEMP_DIR%\README.md" >nul 2>&1
 if exist "%TEMP_DIR%\i18n" rd /s /q "%TEMP_DIR%\i18n" >nul 2>&1
 if exist "%TEMP_DIR%\build.sh" del /q "%TEMP_DIR%\build.sh" >nul 2>&1
 if exist "%TEMP_DIR%\build.bat" del /q "%TEMP_DIR%\build.bat" >nul 2>&1
+if exist "%TEMP_DIR%\update.sh" del /q "%TEMP_DIR%\update.sh" >nul 2>&1
 if exist "%TEMP_DIR%\.hotreload" del /q "%TEMP_DIR%\.hotreload" >nul 2>&1
 
 REM 删除旧的输出文件
