@@ -997,6 +997,7 @@
   border: 1px solid rgba(233, 236, 239, 0.4);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
+  display: none;
 }
 
 .tr-chart-label {
